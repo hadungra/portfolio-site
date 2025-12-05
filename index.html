@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hadungra Boro | Creative Developer & Designer</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  :root {
+    --primary: #9b59b6; 
+    --secondary: #8e44ad; 
+    --accent: #c39bd3;
+    --dark-bg: #2c1a36;
+    --text-light: #e0d9f1;
+    --text-dark: #f8f8f8;
+    --card-bg: rgba(255,255,255,0.05);
+  }
+
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Segoe UI', sans-serif; background: var(--dark-bg); color: var(--text-light); line-height:1.6; overflow-x:hidden; }
+
+  /* NAV */
+  nav { position: fixed; top:0; width:100%; background: rgba(44,26,54,0.95); backdrop-filter: blur(10px); display:flex; justify-content:space-between; align-items:center; padding:1rem 2rem; z-index:1000; box-shadow:0 2px 10px rgba(0,0,0,0.3); }
+  .logo { font-weight:700; font-size:1.5rem; background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; cursor:pointer; }
+  nav ul { display:flex; list-style:none; gap:2rem; }
+  nav a { text-decoration:none; color: var(--text-light); font-weight:500; position:relative; cursor:pointer; }
+  nav a.active { color: var(--primary); }
+  nav a::after { content:''; position:absolute; bottom:-5px; left:0; width:0; height:2px; background: linear-gradient(135deg, var(--primary), var(--secondary)); transition: width 0.3s ease; }
+  nav a:hover::after { width:100%; }
+
+  /* HERO */
+  .hero { min-height:100vh; display:flex; align-items:center; justify-content:center; text-align:center; padding-top:80px; background: var(--dark-bg); opacity:0; transform:translateY(30px); transition: all 1s ease; }
+  .hero.visible { opacity:1; transform:translateY(0); }
+  .hero h1 { font-size:3rem; margin-bottom:1rem; color: var(--text-light); }
+  .hero p.subtitle { font-size:1.5rem; color: var(--accent); margin-bottom:1rem; }
+  .hero .cta { margin-top:1.5rem; display:flex; gap:1rem; justify-content:center; flex-wrap:wrap; }
+  .btn { padding:0.8rem 2rem; border-radius:50px; text-decoration:none; font-weight:600; transition: all 0.4s ease; display:inline-block; cursor:pointer; }
+  .btn-primary { background: linear-gradient(135deg, var(--primary), var(--secondary)); color:white; }
+  .btn-primary:hover { transform:translateY(-3px); }
+  .btn-secondary { border:2px solid var(--primary); color:var(--primary); background:transparent; }
+  .btn-secondary:hover { background: linear-gradient(135deg, var(--primary), var(--secondary)); color:white; transform:translateY(-3px); }
+
+  /* SECTIONS */
+  section { padding:6rem 2rem; max-width:1200px; margin:0 auto; background: var(--dark-bg); color: var(--text-light); scroll-margin-top:80px; opacity:0; transform:translateY(30px); transition: all 1s ease; }
+  section.visible { opacity:1; transform:translateY(0); }
+  h2 { font-size:2.5rem; text-align:center; margin-bottom:1rem; color: var(--text-light); }
+  p.subtitle { text-align:center; color:var(--accent); margin-bottom:3rem; }
+
+  /* About */
+  .about-grid { display:grid; grid-template-columns:1fr 1fr; gap:2rem; align-items:center; }
+  .profile-image { width:250px; height:250px; border-radius:50%; background: linear-gradient(135deg, var(--primary), var(--secondary)); display:flex; align-items:center; justify-content:center; font-size:5rem; color:white; margin:auto; }
+
+  /* Skills */
+  .skills-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:2rem; }
+  .skill-card { padding:1.5rem; background: var(--card-bg); border-radius:12px; border:1px solid rgba(255,255,255,0.1); }
+  .skill-card h3 { margin-bottom:1rem; color: var(--primary); }
+  .skill-bar { width:100%; background: rgba(255,255,255,0.1); border-radius:3px; height:6px; margin-bottom:1rem; overflow:hidden; }
+  .skill-fill { height:100%; width:0; background:linear-gradient(90deg,var(--primary),var(--secondary)); border-radius:3px; transition: width 1.2s ease; }
+
+  /* Projects */
+  .projects-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:2rem; }
+  .project-card { border-radius:12px; overflow:hidden; background: var(--card-bg); box-shadow:0 10px 30px rgba(0,0,0,0.3); padding:1rem; transition: all 0.4s ease; }
+  .project-card:hover { transform:translateY(-5px); box-shadow:0 15px 40px rgba(155,89,182,0.5); }
+  .project-card h3 { margin-bottom:0.5rem; color: var(--primary); }
+
+  /* Testimonials */
+  .testimonials-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:2rem; }
+  .testimonial-card { padding:1.5rem; background: var(--card-bg); border-radius:12px; border-left:4px solid var(--primary); }
+  .testimonial-author { display:flex; align-items:center; gap:1rem; margin-top:1rem; color: var(--text-light); }
+  .author-avatar { width:50px;height:50px;border-radius:50%;background: linear-gradient(135deg, var(--primary),var(--secondary)); display:flex; align-items:center; justify-content:center;color:white; font-weight:700; }
+
+  /* Contact */
+  .contact-info { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:2rem; margin-top:3rem; }
+  .contact-item { padding:1.5rem; background: var(--card-bg); border-radius:12px; border:1px solid rgba(255,255,255,0.1); text-align:center; color: var(--text-light); }
+  .contact-item i { font-size:2rem; color:var(--primary); margin-bottom:0.5rem; display:block; }
+  .contact-item a { color: var(--text-light); text-decoration:none; }
+  .contact-item a:hover { color: var(--primary); }
+  .social-links { display:flex; justify-content:center; gap:1rem; margin-top:2rem; }
+  .social-link { width:50px; height:50px; border-radius:50%; background: linear-gradient(135deg,var(--primary),var(--secondary)); display:flex; align-items:center; justify-content:center; color:white; transition:all 0.3s ease; }
+  .social-link:hover { transform:translateY(-3px); }
+
+  footer { text-align:center; padding:2rem; background: #1a0f24; color:white; margin-top:2rem; }
+
+  @media(max-width:768px) {
+    .about-grid { grid-template-columns:1fr; }
+    .hero h1 { font-size:2.5rem; }
+    .skills-grid, .projects-grid, .testimonials-grid, .contact-info { grid-template-columns:1fr !important; gap:1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">HB</div>
+  <ul>
+    <li><a href="#hero">Home</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#testimonials">Testimonials</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero" class="hero">
+  <div>
+    <h1>Hadungra Boro</h1>
+    <p class="subtitle">Creative Developer & Designer</p>
+    <div class="cta">
+      <a href="#projects" class="btn btn-primary">View My Work</a>
+      <a href="#contact" class="btn btn-secondary">Get In Touch</a>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <h2>About Me</h2>
+  <p class="subtitle">Passionate about creating functional and beautiful digital experiences</p>
+  <div class="about-grid">
+    <div>
+      <p>I'm a web developer and designer specializing in creating responsive, user-centric applications that combine creativity with functionality.</p>
+      <p>I enjoy pushing boundaries and delivering exceptional results through clean code and intuitive design.</p>
+    </div>
+    <div class="profile-image">
+      <i class="fas fa-user"></i>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <h2>Skills</h2>
+  <p class="subtitle">My core skills and expertise</p>
+  <div class="skills-grid">
+    <div class="skill-card">
+      <h3>Frontend</h3>
+      <div class="skill-item">
+        <div>HTML/CSS</div>
+        <div class="skill-bar"><div class="skill-fill" data-width="95%"></div></div>
+      </div>
+      <div class="skill-item">
+        <div>JavaScript</div>
+        <div class="skill-bar"><div class="skill-fill" data-width="90%"></div></div>
+      </div>
+      <div class="skill-item">
+        <div>React</div>
+        <div class="skill-bar"><div class="skill-fill" data-width="85%"></div></div>
+      </div>
+    </div>
+    <div class="skill-card">
+      <h3>Backend</h3>
+      <div class="skill-item">
+        <div>Node.js</div>
+        <div class="skill-bar"><div class="skill-fill" data-width="85%"></div></div>
+      </div>
+      <div class="skill-item">
+        <div>Python</div>
+        <div class="skill-bar"><div class="skill-fill" data-width="80%"></div></div>
+      </div>
+      <div class="skill-item">
+        <div>MongoDB</div>
+        <div class="skill-bar"><div class="skill-fill" data-width="80%"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <h2>Projects</h2>
+  <p class="subtitle">Some of my work</p>
+  <div class="projects-grid">
+    <div class="project-card">
+      <h3>Portfolio Website</h3>
+      <p>A responsive portfolio website showcasing projects and skills.</p>
+    </div>
+    <div class="project-card">
+      <h3>Web Application</h3>
+      <p>Interactive web app built with React and Node.js.</p>
+    </div>
+    <div class="project-card">
+      <h3>E-Commerce Platform</h3>
+      <p>Full-stack e-commerce application with payment integration.</p>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testimonials">
+  <h2>Testimonials</h2>
+  <p class="subtitle">What clients say</p>
+  <div class="testimonials-grid">
+    <div class="testimonial-card">
+      <p>"Hadungra delivered excellent work!"</p>
+      <div class="testimonial-author">
+        <div class="author-avatar">AK</div>
+        <div><strong>Akshay Kumar</strong><br>CEO, TechVision</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <h2>Contact</h2>
+  <p class="subtitle">Get in touch</p>
+  <div class="contact-info">
+    <div class="contact-item">
+      <i class="fas fa-envelope"></i>
+      <a href="mailto:Hadungraboro000@gmail.com">Hadungraboro000@gmail.com</a>
+    </div>
+    <div class="contact-item">
+      <i class="fas fa-phone"></i>
+      <p>+91 XXXXX XXXXX</p>
+    </div>
+    <div class="contact-item">
+      <i class="fas fa-map-marker-alt"></i>
+      <p>India</p>
+    </div>
+  </div>
+  <div class="social-links">
+    <a href="#" class="social-link" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+    <a href="#" class="social-link" target="_blank"><i class="fab fa-github"></i></a>
+  </div>
+</section>
+
+<footer>
+  &copy; 2025 Hadungra Boro. All rights reserved.
+</footer>
+
+<script>
+  // Active nav link
+  const sections = document.querySelectorAll("section");
+  const navLinks = document.querySelectorAll("nav a");
+
+  window.addEventListener("scroll", () => {
+    let current = "";
+    sections.forEach(section => {
+      const sectionTop = section.offsetTop - 100;
+      if(pageYOffset >= sectionTop){
+        current = section.getAttribute("id");
+      }
+    });
+    navLinks.forEach(link => {
+      link.classList.remove("active");
+      if(link.getAttribute("href") === `#${current}`){
+        link.classList.add("active");
+      }
+    });
+  });
+
+  // Animate skill bars on scroll
+  const skills = document.querySelectorAll(".skill-fill");
+  const skillSection = document.getElementById("skills");
+  let skillsAnimated = false;
+
+  window.addEventListener("scroll", () => {
+    const sectionTop = skillSection.offsetTop - window.innerHeight + 100;
+    if(window.scrollY > sectionTop && !skillsAnimated){
+      skills.forEach(skill => {
+        skill.style.width = skill.getAttribute("data-width");
+      });
+      skillsAnimated = true;
+    }
+  });
+
+  // Section fade-in on scroll
+  const allSections = document.querySelectorAll("section, .hero");
+  const revealSections = () => {
+    allSections.forEach(section => {
+      const sectionTop = section.getBoundingClientRect().top;
+      if(sectionTop < window.innerHeight - 100){
+        section.classList.add("visible");
+      }
+    });
+  };
+  window.addEventListener("scroll", revealSections);
+  window.addEventListener("load", revealSections);
+</script>
+</body>
+</html>
